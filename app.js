@@ -10,6 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/api/places/", placesRoutes);
+app.use("/api/users/", usersRoutes);
 
 app.use((req, res, next) => {
   const error = new httpError("Could not find this route", 404);
@@ -23,6 +24,5 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "unknown  error occured" });
 });
-// app.use("/api/users/", usersRoutes);
 
 app.listen(5000);
