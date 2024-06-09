@@ -50,7 +50,9 @@ const getPlacesByUserID = async (req, res, next) => {
     );
   }
   res.json({
-    places: userWithPlaces.places.map((place) => place.toObject({ getters: true })),
+    places: userWithPlaces.places.map((place) =>
+      place.toObject({ getters: true })
+    ),
   });
 };
 
@@ -166,15 +168,15 @@ const deletePlace = async (req, res, next) => {
   }
 
   try {
-    const sess = mongoose.startSession();
+    const sess = await mongoose.startSession();
     sess.startTransaction();
-    await place.remove({ session: sess });
+    await Place.findByIdAndDelete(placeId, { session: sess });
     place.creator.places.pull(place);
     await place.creator.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete place.",
+      "Something went wrong1, could not delete place.",
       500
     );
     return next(error);
